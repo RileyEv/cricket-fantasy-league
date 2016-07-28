@@ -2,6 +2,9 @@
 from __future__ import unicode_literals
 import requests
 import json
+from numpy import mean
+from numpy import std
+from numpy import array
 
 
 class Match():
@@ -13,6 +16,7 @@ class Match():
         self.get_match_details()
         self.which_team()
         self.create_players()
+        self.calculate_bat_innings()
 
     def __str__(self):
         return self.match_id
@@ -87,17 +91,24 @@ class Match():
             'extras': 0.06 * runs,
         }
 
+    def calculate_mean_std(self, arr):  # Pass in array of numbers to be calculated on
+        arr = array(arr)
+        return mean(arr), std(arr)
+
     def calculate_bat_innings(self):
         # only battings figures added
         if self.match_data['innings'][0]['team_batting_id'] == self.team_id:
             innings = self.match_data['innings'][0]
         else:
             innings = self.match_data['innings'][1]
-        if strike_rate_enabled(innings):
-            team_strike_rate = (innings['runs'] / (innings['overs'] * 3)) * 50
-            par_scores = calculate_par_scores(innings)
+        if self.strike_rate_enabled(innings):
+            strike_rates = []
             for i in innings['bat']:
-                pass
+                if i['balls'] != 0:
+                    strike_rates.append((float(i['runs']) / float(i['balls'])) * 100.0)
+            mean, std = self.calculate_mean_std(strike_rates)
+            print(strike_rates)
+            print(mean, std)
 
     def bowl_innings(self):
         # blowing + fielding figures added
