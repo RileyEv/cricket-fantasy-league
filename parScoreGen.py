@@ -16,7 +16,7 @@ def get_data(url):
 
 API_URL = 'http://www.play-cricket.com/api/v2/'
 API_KEY = '1ee0d0a07cbc2669663a434020f184da'
-SEASONS = ['2013', '2014', '2015', '2016']
+SEASONS = ['2011', '2012', '2013', '2014', '2015', '2016']
 TEAM_ID = '98565'
 POSITIONS = {
     '2013': [
@@ -132,14 +132,14 @@ ALL_SEASONS = [
 ]
 
 for k, v in POSITIONS.iteritems():
-    f = open('{}.csv'.format(k), 'w')
-    writer = csv.writer(f)
+    # f = open('{}.csv'.format(k), 'w')
+    # writer = csv.writer(f)
     n = 0
     for i in v:
-        writer.writerow(i)
+        # writer.writerow(i)
         ALL_SEASONS[n] += i
         n += 1
-    f.close()
+    # f.close()
 
 
 AVERAGES = []
