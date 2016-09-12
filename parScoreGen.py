@@ -95,25 +95,76 @@ for i in SEASONS:
                     API_KEY,
                 )
             )['match_details'][0]
-            if match_data['innings'][0]['team_batting_id'] == TEAM_ID:
-                innings = match_data['innings'][0]
-            else:
-                innings = match_data['innings'][1]
-            POSITIONS[i][0].append(innings['runs'])
-            for bat in innings['bat']:
-                if bat['how_out'] == 'did not bat':
-                    POSITIONS[i][int(bat['position'])].append('dnb')
-                    print(bat['position'], 'dnb')
+            if match_data['result'] != 'A':
+                if match_data['innings'][0]['team_batting_id'] == TEAM_ID:
+                    innings = match_data['innings'][0]
                 else:
-                    if bat['runs'] == '':
-                        bat['runs'] = 0
-                    POSITIONS[i][int(bat['position'])].append(int(bat['runs']))
-                    print(bat['position'], bat['runs'])
+                    innings = match_data['innings'][1]
+                POSITIONS[i][0].append(innings['runs'])
+                for n in range(11):
+                    try:
+                        bat = innings['bat'][n]
+                    except IndexError:
+                        bat = {'how_out': 'did not bat', 'position': str(n + 1)}
+                    if bat['how_out'] == 'did not bat':
+                        POSITIONS[i][int(bat['position'])].append('dnb')
+                        print(bat['position'], 'dnb')
+                    else:
+                        if bat['runs'] == '':
+                            bat['runs'] = 0
+                        POSITIONS[i][int(bat['position'])].append(int(bat['runs']))
+                        print(bat['position'], bat['runs'])
     print(POSITIONS)
+
+ALL_SEASONS = [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+]
 
 for k, v in POSITIONS.iteritems():
     f = open('{}.csv'.format(k), 'w')
     writer = csv.writer(f)
+    n = 0
     for i in v:
         writer.writerow(i)
+        ALL_SEASONS[n] += i
+        n += 1
     f.close()
+
+
+AVERAGES = []
+total_score = 0.0
+f = open('all.csv', 'w')
+writer = csv.writer(f)
+for i in ALL_SEASONS:
+    writer.writerow(i)
+    position_total = 0
+    for score in i:
+        if score != 'dnb':
+            position_total += int(score)
+    mean = position_total / float(len(i))
+    AVERAGES.append(
+        {
+            'mean': mean,
+        }
+    )
+    total_score += mean
+f.close()
+
+del AVERAGES[0]
+for i in range(len(AVERAGES)):
+    AVERAGES[i]['percentage'] = 100 * (AVERAGES[i]['mean'] / total_score)
+
+print()
+print()
+print(AVERAGES)
