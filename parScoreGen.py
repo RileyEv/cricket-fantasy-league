@@ -17,7 +17,7 @@ def get_data(url):
 API_URL = 'http://www.play-cricket.com/api/v2/'
 API_KEY = '1ee0d0a07cbc2669663a434020f184da'
 SEASONS = ['2011', '2012', '2013', '2014', '2015', '2016']
-TEAM_ID = '64265'
+TEAM_ID = '64264'
 POSITIONS = {
     '2011': [
         [],
@@ -123,7 +123,7 @@ for i in SEASONS:
                     API_KEY,
                 )
             )['match_details'][0]
-            if match_data['result'] != 'A':
+            if match_data['result'] != 'A' and match_data['result'] != '':
                 if match_data['innings'][0]['team_batting_id'] == TEAM_ID:
                     innings = match_data['innings'][0]
                 else:
@@ -142,6 +142,8 @@ for i in SEASONS:
                             bat['runs'] = 0
                         POSITIONS[i][int(bat['position'])].append(int(bat['runs']))
                         print(bat['position'], bat['runs'])
+            else:
+                print('abandoned')
     print(POSITIONS)
 
 ALL_SEASONS = [
