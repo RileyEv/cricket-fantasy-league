@@ -17,10 +17,9 @@ def get_data(url):
 API_URL = 'http://www.play-cricket.com/api/v2/'
 API_KEY = '1ee0d0a07cbc2669663a434020f184da'
 SEASONS = ['2011', '2012', '2013', '2014', '2015', '2016']
-TEAM_ID = '64264'
+TEAM_ID = '64265'
 POSITIONS = {
     '2011': [
-        [],
         [],
         [],
         [],
@@ -45,10 +44,8 @@ POSITIONS = {
         [],
         [],
         [],
-        [],
     ],
     '2013': [
-        [],
         [],
         [],
         [],
@@ -73,7 +70,6 @@ POSITIONS = {
         [],
         [],
         [],
-        [],
     ],
     '2015': [
         [],
@@ -87,10 +83,8 @@ POSITIONS = {
         [],
         [],
         [],
-        [],
     ],
     '2016': [
-        [],
         [],
         [],
         [],
@@ -128,26 +122,24 @@ for i in SEASONS:
                     innings = match_data['innings'][0]
                 else:
                     innings = match_data['innings'][1]
-                POSITIONS[i][0].append(innings['runs'])
                 for n in range(11):
                     try:
                         bat = innings['bat'][n]
                     except IndexError:
                         bat = {'how_out': 'did not bat', 'position': str(n + 1)}
                     if bat['how_out'] == 'did not bat':
-                        POSITIONS[i][int(bat['position'])].append('dnb')
+                        POSITIONS[i][int(bat['position']) - 1].append('dnb')
                         print(bat['position'], 'dnb')
                     else:
                         if bat['runs'] == '':
                             bat['runs'] = 0
-                        POSITIONS[i][int(bat['position'])].append(int(bat['runs']))
+                        POSITIONS[i][int(bat['position']) - 1].append(int(bat['runs']))
                         print(bat['position'], bat['runs'])
             else:
                 print('abandoned')
     print(POSITIONS)
 
 ALL_SEASONS = [
-    [],
     [],
     [],
     [],
@@ -191,7 +183,6 @@ for i in ALL_SEASONS:
     total_score += mean
 f.close()
 
-del AVERAGES[0]
 for i in range(len(AVERAGES)):
     AVERAGES[i]['percentage'] = 100 * (AVERAGES[i]['mean'] / total_score)
 
