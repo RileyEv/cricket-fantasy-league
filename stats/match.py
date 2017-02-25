@@ -8,7 +8,7 @@ from .player import Player
 class Match():
     def __init__(self, match_id, players):
         self.match_id = match_id
-        self.api_key = "1ee0d0a07cbc2669663a434020f184da"
+        self.api_key = ""
         self.team_id = "98565"
         self.players = players
         self.get_match_details()
