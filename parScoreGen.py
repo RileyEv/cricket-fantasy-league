@@ -15,7 +15,7 @@ def get_data(url):
         r.raise_for_status()
 
 API_URL = 'http://www.play-cricket.com/api/v2/'
-API_KEY = '1ee0d0a07cbc2669663a434020f184da'
+API_KEY = ''
 SEASONS = ['2011', '2012', '2013', '2014', '2015', '2016']
 TEAM_ID = '64265'
 POSITIONS = {
